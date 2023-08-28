@@ -1,15 +1,20 @@
-import { useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import GoalItem from './components/GoalItem';
-import GoalInput from './components/GoalInput';
+import { useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import GoalInput from "./components/GoalInput";
+import GoalItem from "./components/GoalItem";
 
 export default function App() {
-
   const [goalsList, setGoalsList] = useState([]);
 
-
   const addButtonHandler = (enteredText) => {
-    setGoalsList(state => [...state, { text: enteredText, id: Math.random().toString() }])
+    setGoalsList((state) => [
+      ...state,
+      { text: enteredText, id: Math.random().toString() },
+    ]);
+  };
+  const deleteGoalHandler = (id) => {
+    console.log("delete");
+    setGoalsList((state) => state.filter((goal) => goal.id !== id));
   };
 
   return (
@@ -18,12 +23,17 @@ export default function App() {
       <View style={styles.listContainer}>
         <FlatList
           data={goalsList}
-          renderItem={(itemData) => <GoalItem text={itemData.item.text} />}
+          renderItem={(itemData) => (
+            <GoalItem
+              id={itemData.item.id}
+              onDeleteItem={deleteGoalHandler}
+              text={itemData.item.text}
+            />
+          )}
           keyExtractor={(item) => item.id}
-        >
-        </FlatList>
+        ></FlatList>
       </View>
-    </View >
+    </View>
   );
 }
 
